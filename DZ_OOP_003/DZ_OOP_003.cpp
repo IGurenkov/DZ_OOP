@@ -1,12 +1,5 @@
 ﻿#include <iostream>
-#include <cassert>
-#include <string>
-#include <algorithm>
-#include <numeric>
-#include "Fraction.h"
-
-
-
+#include <cmath>
 
 using namespace std;
 
@@ -18,9 +11,12 @@ Circle (круг). Класс Parallelogram — базовый для класс
 //Задание 1
 class Figure
 {
+protected:
+    double mA;
+    double mB;
 public:
-   virtual int area() = 0;
-   Figure()
+   virtual double area() = 0;
+   Figure(double A, double B) : mA(A), mB(B)
    {
 
    }
@@ -29,65 +25,70 @@ public:
 class Parallelogram : virtual public Figure
 {
 public:
-    Parallelogram()
+    Parallelogram(double A, double B):Figure(A, B)
     {
 
     }
-    int area()
+    double area()
     {
-
+        cout << "   Parallelogram Area = " << mA*mB << endl;
+        return 0;
     }
 };
 
 class Circle : virtual public Figure
 {
 public:
-    Circle()
+    Circle(double A, double B) : Figure(A, B)
     {
 
     }
-    int area()
+    double area()
     {
-
+        cout << "   Circle Area = " << mB*pow(mA, 2) << endl;
+        return 0;
     }
 };
 
 class Rectangle : virtual public Parallelogram
 {
 public:
-    Rectangle() 
+    Rectangle(double A, double B) : Figure(A, B), Parallelogram(A, B)
     {
 
     }
-    int area()
+    double area()
     {
-
+        cout << "   Rectangle Area = " << mA*mB << endl;
+        return 0;
     }
 };
 
 class Square : virtual public Parallelogram
 {
 public:
-    Square()
+    Square(double A, double B) : Figure(A, B), Parallelogram(A, B)
     {
 
     }
-    int area()
+    double area()
     {
-
+        cout << "   Square Area = " << pow (mA, 2) << endl;
+        return 0;
     }
 };
 
 class Rhombus : virtual public Parallelogram
 {
 public:
-    Rhombus()
+    Rhombus(double A, double B) : Figure(A, B), Parallelogram(A, B)
     {
 
     }
-    int area()
+    double area()
     {
-
+        cout << "   Rhombus Area = " << mA * mB << endl;
+        return 0;
     }
 };
 
@@ -142,19 +143,6 @@ public:
     }
 };
 
-/*3. Создать класс: Fraction (дробь). Дробь имеет числитель и знаменатель (например, 3/7 или 9/2). 
-Предусмотреть, чтобы знаменатель не был равен 0. 
-Перегрузить:
-математические бинарные операторы (+, -, *, /) для выполнения действий с дробями
-унарный оператор (-)
-логические операторы сравнения двух дробей (==, !=, <, >, <=, >=).
-
-Примечание: Поскольку операторы < и >=, > и <= — это логические противоположности, попробуйте перегрузить один через другой.
-
-Продемонстрировать использование перегруженных операторов.*/
-
-
-
 //Задание 4
 /*4. Создать класс Card, описывающий карту в игре БлэкДжек. У этого класса должно быть три поля: масть, значение карты 
 и положение карты (вверх лицом или рубашкой). Сделать поля масть и значение карты типом перечисления (enum). 
@@ -162,10 +150,8 @@ public:
 метод Flip(), который переворачивает карту, т.е. если она была рубашкой вверх, то он ее поворачивает лицом вверх, и наоборот.
 метод GetValue(), который возвращает значение карты, пока можно считать, что туз = 1.*/
 
-
-
-enum class m_suit { Diamonds, Hearts, Clubs, Spades };
-enum class m_cardvalue 
+enum class m_suit : char { Diamonds = 'D', Hearts = 'H', Clubs = 'C', Spades = 'S' };
+enum class m_cardvalue : int
 {
     TWO = 2, THREE = 3, FOUR = 4, FIVE = 5, SIX = 6, SEVEN = 7, EIGHT = 8,
     NINE = 9, TEN = 10, JACK = 10, QUEEN = 10, KING = 10, ACE = 1
@@ -174,35 +160,52 @@ enum class m_cardvalue
 class Card
 {
 private:
-    m_suit suit;    
+    m_suit suit;
     m_cardvalue cardvalue;
     bool m_isFaceUp;
 
 public:
-    Card(bool isFaceUp, enum suit, enum cardvalue) : suit{}, cardvalue{}, m_isFaceUp(isFaceUp)
+    Card(bool isFaceUp, m_suit suit, m_cardvalue cardvalue) : m_isFaceUp(isFaceUp), suit(suit), cardvalue(cardvalue)
     {
 
     }
     void Flip()
     {
-
+        m_isFaceUp = !m_isFaceUp;
     }
-    string GetValue ()
-    {    
-        
-    }
-    string GetSuit()
+    m_cardvalue GetValue()
     {
-
+        return cardvalue;
     }
-    
-
+    void print()
+    {
+        cout << "   Face Up: " << m_isFaceUp << endl << "   Suit: " << static_cast<char>(suit) << endl << "   Cardvalue: " << static_cast<int>(cardvalue) << endl;
+    }
 };
 
 
 
 int main()
 {
+    cout << endl;
+    cout << "   Exercise 1";
+    cout << endl << endl;
+
+    Parallelogram A(15, 17);
+    A.area();
+
+    Circle B(4, 3.14);
+    B.area();
+
+    Rectangle C(6, 4);
+    C.area();
+
+    Square D(6, 1);
+    D.area();
+
+    Rhombus E(7, 3);
+    E.area();
+
     cout << endl;
     cout << "   Exercise 2";
     cout << endl << endl;
@@ -225,84 +228,18 @@ int main()
     cout << "   Minivan" << endl;
     Minivan minivan("Toyota", "Estima");
     minivan.print();
-
+      
     cout << endl;
-    cout << "   Exercise 3";
+    cout << "   Exercise 4";
     cout << endl << endl;
-        
-    Fraction a(1, 2), b(1, 3), c(5), d;
 
-    cout << "------------- 1 ------------- " << endl <<
-        "a: " << a << endl <<
-        "b: " << b << endl <<
-        "c: " << c << endl <<
-        "d: " << d << endl;
-
-    cout << "b <m_numerator> <m_denominator>: ";
-    cin >> b;
-
-    d = 2 * a / b;
-    c = d * 1;
-
-    cout << "------------- 2 ------------- " << endl <<
-        "a: " << a << endl <<
-        "b: " << b << endl <<
-        "c: " << c << endl <<
-        "d: " << d << endl;
-    if (d == c)
-    {
-        cout << "d == c" << endl;
-    }
-    else
-    {
-        cout << "NOT d == c" << endl;
-    }
-    a = a - d;
-    c /= -d;
-
-    cout << "------------- 3 ------------- " << endl <<
-        "a: " << a << endl <<
-        "b: " << b << endl <<
-        "c: " << c << endl <<
-        "d: " << d << endl;
-    b = --c;
-    cout << "------------- 4 ------------- " << endl <<
-        "a: " << a << endl <<
-        "b: " << b << endl <<
-        "c: " << c << endl <<
-        "d: " << d << endl;
-    b = d--;
-
-    cout << "------------- 5 ------------- " << endl <<
-        "a: " << a << endl <<
-        "b: " << b << endl <<
-        "c: " << c << endl <<
-        "d: " << d << endl;
-    if (a < c)
-    {
-        cout << "a < c" << endl;
-    }
-    else
-    {
-        cout << "NOT a < c" << endl;
-    }
-    if (d < d)
-    {
-        cout << "d < d" << endl;
-    }
-    else
-    {
-        cout << "NOT d < d" << endl;
-    }
-    if (d <= d)
-    {
-        cout << "d <= d" << endl;
-    }
-    else
-    {
-        cout << "NOT d <= d" << endl;
-    }
+    Card a(false, m_suit::Hearts, m_cardvalue::QUEEN);
+    a.Flip();
+    a.print();
 
     return 0;
 }
+
+
+
 
