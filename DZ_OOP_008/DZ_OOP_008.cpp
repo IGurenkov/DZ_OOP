@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -180,8 +181,7 @@ int main()
     cout << endl << endl;
 
     Bar A;
-    float n;
-    
+    float n;    
     
     do
     {
@@ -243,7 +243,7 @@ int main()
         }
         catch (OffTheField& off)
         {
-            cout << off.what() << " ||" << " Robots current position is: " << "X = " << R.GetX() << " " << "Y = " << R.GetY() << endl;
+            cout << off.what() << " ||" << " Robots position is: " << "X = " << R.GetX() << " " << "Y = " << R.GetY() << endl;
         }
     }
     cout << "###############################################################################################" << endl << endl;
